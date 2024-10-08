@@ -144,10 +144,22 @@ class SRF:
 
         data = self.client.fetch_song_list(channel_id)
         ret = []
-        for raw_song in data:
-            uri = search_title(title=raw_song["title"], artist=raw_song["artist"]["name"])
+        for i, raw_song in enumerate(data):
+            try:
+                uri = search_title(title=raw_song["title"], artist=raw_song["artist"]["name"])
+            except ConnectionResetError:
+                logger.warning(f"ConnectionResetError for search_title at {i=}, retry in 2s")
+                time.sleep(2)
+                try:
+                    uri = search_title(title=raw_song["title"], artist=raw_song["artist"]["name"])
+                except ConnectionResetError:
+                    logger.error(f"ConnectionResetError for search_title at {i=}, abort")
+                    continue
+
             if uri is not None:
                 ret.append(Song(data=raw_song, uri=uri))
+
+            time.sleep(2)
 
         return ret
 
