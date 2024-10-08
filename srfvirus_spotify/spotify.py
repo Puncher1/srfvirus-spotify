@@ -73,4 +73,5 @@ def remove_from_playlist(songs: List[Song]) -> None:
             items.append(song.uri)
 
     if items:
+        logger.info("remove items to playlist")
         sp_client.playlist_remove_all_occurrences_of_items(SPOTIFY_PLAYLIST_ID, items=items)
