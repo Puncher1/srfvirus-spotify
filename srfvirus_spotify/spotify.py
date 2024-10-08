@@ -60,7 +60,6 @@ def add_to_playlist(songs: List[Song]) -> None:
         if song.uri not in playlist_uris:
             items.append(song.uri)
 
-    print(songs, items)
     if items:
         logger.info("add items to playlist")
         sp_client.playlist_add_items(SPOTIFY_PLAYLIST_ID, items=items)
