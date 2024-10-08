@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 SRF_BASE_URL = "https://api.srgssr.ch"
 SRF_OAUTH_BASE_URL = f"{SRF_BASE_URL}/oauth/v1"
 SRF_AUDIO_BASE_URL = f"{SRF_BASE_URL}/audiometadata/v2"
+WAIT_UNTIL_NEXT_SEARCH = 1  # seconds
 
 
 class _SRFClient:
@@ -148,8 +149,10 @@ class SRF:
             try:
                 uri = search_title(title=raw_song["title"], artist=raw_song["artist"]["name"])
             except ConnectionResetError:
-                logger.warning(f"ConnectionResetError for search_title at {i=}, retry in 2s")
-                time.sleep(2)
+                logger.warning(
+                    f"ConnectionResetError for search_title at {i=}, retry in {WAIT_UNTIL_NEXT_SEARCH}s"
+                )
+                time.sleep(WAIT_UNTIL_NEXT_SEARCH)
                 try:
                     uri = search_title(title=raw_song["title"], artist=raw_song["artist"]["name"])
                 except ConnectionResetError:
@@ -159,7 +162,7 @@ class SRF:
             if uri is not None:
                 ret.append(Song(data=raw_song, uri=uri))
 
-            time.sleep(2)
+            time.sleep(WAIT_UNTIL_NEXT_SEARCH)
 
         return ret
 
