@@ -13,8 +13,8 @@ sentry.init(
     ignore_errors=ignore_errors,
 )
 logging.basicConfig(
-    format="%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s",
-    datefmt="%H:%M:%S",
+    format="%(asctime)s %(name)s %(levelname)s %(message)s",
+    datefmt="%d.%m.%y %H:%M:%S %Z",
     level=logging.INFO,
     handlers=[logging.FileHandler("./logs/logging.log"), logging.StreamHandler()],
 )

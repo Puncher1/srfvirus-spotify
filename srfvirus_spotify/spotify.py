@@ -16,7 +16,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-SPOTIFY_PLAYLIST_ID = "6c6OWdem6i3ekL60K1SiKu"
 SPOTIFY_SCOPES = "playlist-read-private,playlist-modify-private,playlist-modify-public"
 
 
@@ -32,7 +31,7 @@ sp_client = SpotifyClient(
 
 
 def _get_playlist_uris() -> List[str]:
-    playlist_items = sp_client.playlist_items(SPOTIFY_PLAYLIST_ID)
+    playlist_items = sp_client.playlist_items(Env.SPOTIFY_PLAYLIST_ID)
     playlist_uris = []
     if playlist_items:
         playlist_uris = [item["track"]["uri"] for item in playlist_items["items"]]
@@ -62,7 +61,7 @@ def add_to_playlist(songs: List[Song]) -> None:
 
     if items:
         logger.info("add items to playlist")
-        sp_client.playlist_add_items(SPOTIFY_PLAYLIST_ID, items=items)
+        sp_client.playlist_add_items(Env.SPOTIFY_PLAYLIST_ID, items=items)
 
 
 def remove_from_playlist(songs: List[Song]) -> None:
@@ -74,4 +73,4 @@ def remove_from_playlist(songs: List[Song]) -> None:
 
     if items:
         logger.info("remove items to playlist")
-        sp_client.playlist_remove_all_occurrences_of_items(SPOTIFY_PLAYLIST_ID, items=items)
+        sp_client.playlist_remove_all_occurrences_of_items(Env.SPOTIFY_PLAYLIST_ID, items=items)
