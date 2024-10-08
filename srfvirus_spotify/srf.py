@@ -148,14 +148,14 @@ class SRF:
         for i, raw_song in enumerate(data):
             try:
                 uri = search_title(title=raw_song["title"], artist=raw_song["artist"]["name"])
-            except ConnectionResetError:
+            except (ConnectionResetError, requests.ConnectionError):
                 logger.warning(
                     f"ConnectionResetError for search_title at {i=}, retry in {WAIT_UNTIL_NEXT_SEARCH}s"
                 )
                 time.sleep(WAIT_UNTIL_NEXT_SEARCH)
                 try:
                     uri = search_title(title=raw_song["title"], artist=raw_song["artist"]["name"])
-                except ConnectionResetError:
+                except (ConnectionResetError, requests.ConnectionError):
                     logger.error(f"ConnectionResetError for search_title at {i=}, abort")
                     continue
 
