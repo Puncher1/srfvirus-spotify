@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import re
-import requests
 from typing import TYPE_CHECKING, Optional, List
 
 from spotipy import Spotify as SpotifyClient, SpotifyOAuth
@@ -75,11 +74,3 @@ def remove_from_playlist(songs: List[Song]) -> None:
     if items:
         logger.info("remove items to playlist")
         sp_client.playlist_remove_all_occurrences_of_items(Env.SPOTIFY_PLAYLIST_ID, items=items)
-
-
-def ping_spotify_api() -> None:
-    try:
-        requests.get("https://api.spotify.com/v1")
-        logger.info("Ping successful")
-    except requests.RequestException as e:
-        logger.warning(f"Ping failed: {e.__class__} {e}")
